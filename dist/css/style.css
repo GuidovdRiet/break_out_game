@@ -1,0 +1,45 @@
+html {
+  box-sizing: border-box;
+  font-size: 10px;
+  background: #FFA9A9;
+  background-image: url("../img/background-pattern.svg"), linear-gradient(#FFA9A9, #FFA9A9);
+}
+
+body * {
+  position: absolute;
+  display: inline-block;
+  font-family: 'Amatic SC', cursive;
+}
+
+h1 {
+  position: fixed;
+  font-size: 10em;
+  bottom: 1em;
+  top: 1em;
+}
+
+.score {
+  background:rgba(255,255,255,0.2);
+  padding:0 3rem;
+  line-height:1;
+  border-radius:1rem;
+}
+
+
+paddle {
+  width: 159px;
+  height: 36px;
+  background-image: url("../img/paddle.png");
+}
+
+brick {
+  width: 151px;
+  height: 72px;
+  background-image: url("../img/brick.png");
+}
+
+ball {
+  width: 30px;
+  height: 30px;
+  background-image: url("../img/ball.png");
+}
