@@ -3,6 +3,7 @@ class Game {
     private lives : number = 2;
     private h1 : HTMLElement;
     private span : HTMLElement;
+    private startButton : HTMLElement;
 
     private paddle : Paddle;
     private brick : Brick;
@@ -31,7 +32,8 @@ class Game {
         }
 
         // start the game loop
-        requestAnimationFrame(() => this.gameLoop());
+        this.startButton = <HTMLElement>document.querySelector('.start_game');
+        this.startButton.addEventListener('click', () => this.startGame());
     }
 
     // game loop
@@ -65,9 +67,19 @@ class Game {
     public decreaseLifes() {
         this.lives = this.lives - 1;
         if ( this.lives <= 0 ) {
-            console.log('You lose!');
-            // this.gameOver();
+            this.gameOver();
         }
         this.span.innerHTML = `${this.lives}`;
+    }
+
+    private gameOver() {
+        
+    }
+
+    private startGame() {
+        const startScreen = document.querySelector('.start_screen');
+        // make a countdown function here so the user has some time before it starts
+        startScreen.remove();
+        requestAnimationFrame(() => this.gameLoop());
     }
 }

@@ -82,7 +82,8 @@ var Game = (function () {
                 this.bricks.push(new Brick(i, j));
             }
         }
-        requestAnimationFrame(function () { return _this.gameLoop(); });
+        this.startButton = document.querySelector('.start_game');
+        this.startButton.addEventListener('click', function () { return _this.startGame(); });
     }
     Game.prototype.gameLoop = function () {
         var _this = this;
@@ -109,9 +110,17 @@ var Game = (function () {
     Game.prototype.decreaseLifes = function () {
         this.lives = this.lives - 1;
         if (this.lives <= 0) {
-            console.log('You lose!');
+            this.gameOver();
         }
         this.span.innerHTML = "" + this.lives;
+    };
+    Game.prototype.gameOver = function () {
+    };
+    Game.prototype.startGame = function () {
+        var _this = this;
+        var startScreen = document.querySelector('.start_screen');
+        startScreen.remove();
+        requestAnimationFrame(function () { return _this.gameLoop(); });
     };
     return Game;
 }());

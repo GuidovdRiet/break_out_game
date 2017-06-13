@@ -25,6 +25,35 @@ h1 {
   border-radius:1rem;
 }
 
+.start_screen {
+  z-index: 4;
+  width: 100%;
+  height: 100vh;
+  background-color: #FFA9A9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.start_game {
+  border: 2px solid white;
+  background-color: #FFA9A9;
+  border-radius: .3em;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  padding: .1em .5em;
+  font-size: 4em;
+}
+
+.start_game:hover {
+  cursor: pointer;
+  background-color: #F4A2A2;
+}
+
 
 paddle {
   width: 159px;
