@@ -27,12 +27,16 @@ class Paddle {
         this.rightKey = 39;
 
         // startpositie paddle
-        this.x = (window.innerWidth / 2) - 138;
-        this.y = (window.innerHeight - 50) ;
+        this.startPosition();
 
         // eventlisteners on keys 
         window.addEventListener('keydown', (event : KeyboardEvent) => this.movePaddleOnKeyDown(event));
         window.addEventListener('keyup',   (event : KeyboardEvent) => this.stopPaddle(event));
+    }
+
+    public startPosition() {
+        this.x = (window.innerWidth / 2) - 138;
+        this.y = (window.innerHeight - 50) ;
     }
 
     private movePaddleOnKeyDown(event : KeyboardEvent):void {

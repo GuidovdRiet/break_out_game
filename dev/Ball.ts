@@ -23,11 +23,11 @@ class Ball {
     }
 
     // de bal raakt een paddle
-    public hitPaddle() { 
+    public hitPaddle() : void { 
         this.speedY *= -1;
     }
 
-    private startPosition(){
+    private startPosition() : void {
         this.x = 1000;
         this.y = 400;
         this.width = 30;
@@ -45,23 +45,27 @@ class Ball {
         this.x += this.speedX;
         this.y += this.speedY;
 
-        // bounce left and right side of the screen
+        // bounce left, right, top side of the screen
         if(this.x + 40 > window.innerWidth || this.x < 0) { 
             this.speedX *= -1;
         } else if (this.y < 0) {
             this.speedY *= -1;
         }
-        
-        if(this.y > window.innerWidth) { 
+
+        if(this.y > window.innerWidth + 40) { 
             console.log('lose one life');
-            this.game.decreaseLifes();
+            this.game.decreaseLives();
             this.startPosition();
         }
         this.draw();
     }
 
+    public removeBall() {
+        this.div.remove();
+    }
+
     // Reverse direction when ball hits brick
-    public reverse() {
+    public reverse() : void {
         this.speedY *= -1;
     }
     

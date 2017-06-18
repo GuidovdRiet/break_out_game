@@ -1,49 +1,42 @@
 /// <reference path="brick.ts"/>
 class Game {
-    private lives : number = 2;
-    private h1 : HTMLElement;
-    private span : HTMLElement;
+    private lives : number;
+    private totalLives : number = 3;
     private startButton : HTMLElement;
 
     private paddle : Paddle;
     private brick : Brick;
-    private bricks : Array<Brick> = new Array<Brick>();
     private utils : Utils;
     private ball : Ball;
     
+    private bricks : Array<Brick> = new Array<Brick>();
+    private hearts : Array<Score> = new Array<Score>();
+    
     constructor() {
-        this.h1 = document.createElement('h1');
-        document.body.appendChild(this.h1);
-        this.span = document.createElement('span');
-        this.span.innerHTML = `${this.lives}`;
-        this.h1.appendChild(this.span);
+        this.lives = this.totalLives;
+
+        // Create bricks 
+        this.renderBricks();
+        this.renderHearts();
 
         // create objects
         this.paddle = new Paddle();
         this.ball = new Ball(this);
         this.utils = new Utils();
 
-        let rows = 3;
-        let cols = 6;
-        for (let i = 0; i < rows; i++) {
-            for (let j = 0; j < cols; j++) {
-                this.bricks.push(new Brick(i, j));
-            }
-        }
-
         // start the game loop
         this.startButton = <HTMLElement>document.querySelector('.start_game');
-        this.startButton.addEventListener('click', () => this.startGame());
+        this.startButton.addEventListener('click', () => setTimeout(this.startGame(), 4000));
     }
 
     // game loop
-    private gameLoop():void {
+    private gameLoop() : void {
         this.updateElements();
         requestAnimationFrame(() => this.gameLoop());
     }
 
     // update balls en paddles 
-    private updateElements():void {
+    private updateElements() : void {
 
         if(this.utils.hasOverlap(this.ball, this.paddle)) this.ball.hitPaddle();
         
@@ -57,28 +50,72 @@ class Game {
         this.paddle.update();
     }
 
+    private renderBricks() {
+        const rows = 3;
+        const cols = 6;
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                this.bricks.push(new Brick(i, j));
+            }
+        }
+    } 
+
+    private renderHearts() {
+        for (let i = 0; i < 3; i++) {
+            this.hearts.push(new Score(i));
+        }
+    }
+
     // Remove brick on ball hit
-    private removeBrick(brick : Brick) {
+    private removeBrick(brick : Brick) : void {
         brick.removeMyself();
         this.ball.reverse();
     }
 
-    // When ball leaves screen use this method to adjust lives 
-    public decreaseLifes() {
+    // When ball leaves the screen decrease life by 1  
+    public decreaseLives() : void {
         this.lives = this.lives - 1;
-        if ( this.lives <= 0 ) {
+
+        // Remove heart (life)
+        if(this.lives <= 3) {;
+            this.hearts[this.lives].removeMyself();
+        }
+
+        if (this.lives <= 0) {
             this.gameOver();
         }
-        this.span.innerHTML = `${this.lives}`;
     }
 
-    private gameOver() {
-        
+    private gameOver() : void {
+        this.hearts[0].addAttempt();
+
+        // Paddle to starting position
+        this.paddle.startPosition();
+
+        // Empty brick array in DOM
+        this.bricks.forEach((brick : Brick) => {
+            brick.removeMyself();
+        });
+
+        // Empty heart(lives) array in DOM
+        this.hearts.forEach((heart : Score) => {
+            heart.removeMyself();
+        });
+
+        this.hearts.splice(0, 3);
+
+        // Create new hearts
+        this.renderHearts();
+
+        // Create new bricks 
+        this.renderBricks();
+
+        // set score to begin value
+        this.lives = this.totalLives;        
     }
 
-    private startGame() {
+    private startGame() : void {
         const startScreen = document.querySelector('.start_screen');
-        // make a countdown function here so the user has some time before it starts
         startScreen.remove();
         requestAnimationFrame(() => this.gameLoop());
     }

@@ -27,12 +27,15 @@ var Ball = (function () {
         else if (this.y < 0) {
             this.speedY *= -1;
         }
-        if (this.y > window.innerWidth) {
+        if (this.y > window.innerWidth + 40) {
             console.log('lose one life');
-            this.game.decreaseLifes();
+            this.game.decreaseLives();
             this.startPosition();
         }
         this.draw();
+    };
+    Ball.prototype.removeBall = function () {
+        this.div.remove();
     };
     Ball.prototype.reverse = function () {
         this.speedY *= -1;
@@ -48,7 +51,7 @@ var Brick = (function () {
         this.height = 72;
         this.status = true;
         this.y = r * this.height + 20;
-        this.x = c * this.width + (window.innerWidth / 5.4);
+        this.x = c * this.width + ((window.innerWidth / 2) - 453);
         this.div = document.createElement('brick');
         document.body.appendChild(this.div);
         this.draw();
@@ -65,25 +68,17 @@ var Brick = (function () {
 var Game = (function () {
     function Game() {
         var _this = this;
-        this.lives = 2;
+        this.totalLives = 3;
         this.bricks = new Array();
-        this.h1 = document.createElement('h1');
-        document.body.appendChild(this.h1);
-        this.span = document.createElement('span');
-        this.span.innerHTML = "" + this.lives;
-        this.h1.appendChild(this.span);
+        this.hearts = new Array();
+        this.lives = this.totalLives;
+        this.renderBricks();
+        this.renderHearts();
         this.paddle = new Paddle();
         this.ball = new Ball(this);
         this.utils = new Utils();
-        var rows = 3;
-        var cols = 6;
-        for (var i = 0; i < rows; i++) {
-            for (var j = 0; j < cols; j++) {
-                this.bricks.push(new Brick(i, j));
-            }
-        }
         this.startButton = document.querySelector('.start_game');
-        this.startButton.addEventListener('click', function () { return _this.startGame(); });
+        this.startButton.addEventListener('click', function () { return setTimeout(_this.startGame(), 4000); });
     }
     Game.prototype.gameLoop = function () {
         var _this = this;
@@ -103,18 +98,47 @@ var Game = (function () {
         this.ball.update();
         this.paddle.update();
     };
+    Game.prototype.renderBricks = function () {
+        var rows = 3;
+        var cols = 6;
+        for (var i = 0; i < rows; i++) {
+            for (var j = 0; j < cols; j++) {
+                this.bricks.push(new Brick(i, j));
+            }
+        }
+    };
+    Game.prototype.renderHearts = function () {
+        for (var i = 0; i < 3; i++) {
+            this.hearts.push(new Score(i));
+        }
+    };
     Game.prototype.removeBrick = function (brick) {
         brick.removeMyself();
         this.ball.reverse();
     };
-    Game.prototype.decreaseLifes = function () {
+    Game.prototype.decreaseLives = function () {
         this.lives = this.lives - 1;
+        if (this.lives <= 3) {
+            ;
+            this.hearts[this.lives].removeMyself();
+        }
         if (this.lives <= 0) {
             this.gameOver();
         }
-        this.span.innerHTML = "" + this.lives;
     };
     Game.prototype.gameOver = function () {
+        this.hearts[0].addAttempt();
+        this.paddle.startPosition();
+        this.bricks.forEach(function (brick) {
+            brick.removeMyself();
+        });
+        this.hearts.forEach(function (heart) {
+            heart.removeMyself();
+        });
+        this.hearts.splice(0, 3);
+        this.renderHearts();
+        this.renderBricks();
+        this.lives = this.totalLives;
     };
     Game.prototype.startGame = function () {
         var _this = this;
@@ -138,11 +162,14 @@ var Paddle = (function () {
         this.height = 37;
         this.leftKey = 37;
         this.rightKey = 39;
-        this.x = (window.innerWidth / 2) - 138;
-        this.y = (window.innerHeight - 50);
+        this.startPosition();
         window.addEventListener('keydown', function (event) { return _this.movePaddleOnKeyDown(event); });
         window.addEventListener('keyup', function (event) { return _this.stopPaddle(event); });
     }
+    Paddle.prototype.startPosition = function () {
+        this.x = (window.innerWidth / 2) - 138;
+        this.y = (window.innerHeight - 50);
+    };
     Paddle.prototype.movePaddleOnKeyDown = function (event) {
         switch (event.keyCode) {
             case this.leftKey:
@@ -173,6 +200,35 @@ var Paddle = (function () {
         this.div.style.transform = "translate(" + this.x + "px, " + this.y + "px)";
     };
     return Paddle;
+}());
+var Score = (function () {
+    function Score(i) {
+        this.status = true;
+        this.attempts = 0;
+        this.width = 44;
+        this.height = 40;
+        this.x = 20;
+        this.y = (i * this.width) + 60;
+        this.div = document.createElement('heart');
+        this.div.classList.add('heart');
+        document.body.appendChild(this.div);
+        this.draw();
+    }
+    Score.prototype.removeMyself = function () {
+        this.status = false;
+        this.div.remove();
+    };
+    Score.prototype.addAttempt = function () {
+        this.attempts++;
+        console.log(this.attempts);
+        this.h2 = document.createElement('h2');
+        this.h2.innerHTML = "Fails: " + this.attempts;
+        document.body.appendChild(this.h2);
+    };
+    Score.prototype.draw = function () {
+        this.div.style.transform = "translate(" + this.x + "px, " + this.y + "px)";
+    };
+    return Score;
 }());
 var Utils = (function () {
     function Utils() {
