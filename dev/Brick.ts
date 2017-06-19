@@ -27,4 +27,4 @@ class Brick {
         this.status = false;
         this.div.remove();
     }
-}
+} 

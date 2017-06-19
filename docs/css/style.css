@@ -1,7 +1,7 @@
 html {
   box-sizing: border-box;
   font-size: 10px;
-  background: #FFA9A9;
+  background: #AFECDE;
 }
 
 body {
@@ -43,7 +43,7 @@ h1 {
   z-index: 4;
   width: 100%;
   height: 100vh;
-  background-color: #FFA9A9;
+  background-color: #13A0DC;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,7 +51,7 @@ h1 {
 
 .btn {
   border: 2px solid white;
-  background-color: #FFA9A9;
+  background-color: #13A0DC;
   border-radius: .3em;
   color: white;
   padding: 15px 32px;
@@ -69,7 +69,7 @@ h1 {
 
 .btn:hover {
   cursor: pointer;
-  background-color: #F4A2A2;
+  background-color: #73CCF2;
 }
 
 paddle {

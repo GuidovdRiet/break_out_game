@@ -1,20 +1,20 @@
 var Ball = (function () {
-    function Ball(game, difficulty) {
+    function Ball(game) {
         this.div = document.createElement('ball');
         document.body.appendChild(this.div);
-        this.startPosition(difficulty);
+        this.startPosition();
         this.game = game;
     }
     Ball.prototype.hitPaddle = function () {
         this.speedY *= -1;
     };
-    Ball.prototype.startPosition = function (difficulty) {
+    Ball.prototype.startPosition = function () {
         this.x = 1000;
         this.y = 400;
         this.width = 30;
         this.height = 30;
-        this.speedX = difficulty;
-        this.speedY = difficulty;
+        this.speedX = 10;
+        this.speedY = 10;
         if (Math.random() > 0.5)
             this.speedX *= -1;
     };
@@ -72,14 +72,13 @@ var Game = (function () {
         this.totalBricksHit = 0;
         this.attempts = 0;
         this.wins = 0;
-        this.difficulty = 10;
         this.bricks = new Array();
         this.hearts = new Array();
         this.lives = this.totalLives;
         this.renderBricks();
         this.renderHearts();
         this.paddle = new Paddle();
-        this.ball = new Ball(this, this.difficulty);
+        this.ball = new Ball(this);
         this.utils = new Utils();
         this.h2Attempts = document.createElement('h2');
         this.h2Attempts.classList.add('lost');
@@ -142,7 +141,6 @@ var Game = (function () {
         }
     };
     Game.prototype.winGame = function () {
-        console.log('You Win!');
         this.totalBricksHit = 0;
         this.addWin();
         this.resetGame();

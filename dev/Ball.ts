@@ -1,6 +1,6 @@
 class Ball {
 
-    private div : HTMLElement;
+    public div : HTMLElement;
     
     public x : number;
     public y : number;
@@ -13,6 +13,7 @@ class Ball {
     private game : Game;
 
     constructor(game : Game) {
+
         // Create ball in DOM
         this.div = document.createElement('ball');
         document.body.appendChild(this.div);

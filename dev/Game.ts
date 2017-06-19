@@ -5,13 +5,13 @@ class Game {
     private totalBricksHit : number = 0;
     private attempts : number = 0;
     private wins : number = 0;
-    private startButton : HTMLElement;
 
     private paddle : Paddle;
     private brick : Brick;
     private utils : Utils;
     private ball : Ball;
 
+    private startButton : HTMLElement; 
     private h2Attempts : HTMLElement;
     private h2Wins : HTMLElement;
     
@@ -60,8 +60,7 @@ class Game {
             if(brick.status == true) {
                 if(this.utils.hasOverlap(this.ball, brick)) {
                     this.totalBricksHit++;
-                    console.log(this.totalBricksHit + this.bricks.length);
-                    if(this.totalBricksHit === 2) {
+                    if(this.totalBricksHit === this.bricks.length) {
                         this.winGame();
                     }
                     this.removeBrick(brick);   
@@ -110,8 +109,7 @@ class Game {
     }
 
     private winGame(): void {
-        console.log('You Win!');
-        this.totalBricksHit = 0;
+        this.totalBricksHit = 0;       
         this.addWin();
         this.resetGame();
     }
