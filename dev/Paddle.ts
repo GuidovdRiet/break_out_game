@@ -34,12 +34,12 @@ class Paddle {
         window.addEventListener('keyup',   (event : KeyboardEvent) => this.stopPaddle(event));
     }
 
-    public startPosition() {
+    public startPosition(): void {
         this.x = (window.innerWidth / 2) - 138;
         this.y = (window.innerHeight - 50) ;
     }
 
-    private movePaddleOnKeyDown(event : KeyboardEvent):void {
+    private movePaddleOnKeyDown(event : KeyboardEvent): void {
         switch(event.keyCode) {
             case this.leftKey:
                 this.leftSpeed = 15;
@@ -50,7 +50,7 @@ class Paddle {
         }
     }
 
-    private stopPaddle(event : KeyboardEvent) {
+    private stopPaddle(event : KeyboardEvent): void {
         switch(event.keyCode) {
             case this.leftKey:
                 this.leftSpeed = 0;
@@ -61,14 +61,14 @@ class Paddle {
         }
     }
 
-    public update() : void {
+    public update(): void {
         let targetX = this.x - this.leftSpeed + this.rightSpeed;
         if(targetX > -15 && targetX + 200 < window.innerWidth) this.x = targetX;
                         
         this.draw();
     }
 
-    private draw() : void {
+    private draw(): void {
         this.div.style.transform = `translate(${this.x}px, ${this.y}px)`;
     }
 }

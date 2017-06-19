@@ -69,6 +69,9 @@ var Game = (function () {
     function Game() {
         var _this = this;
         this.totalLives = 3;
+        this.totalBricksHit = 0;
+        this.attempts = 0;
+        this.wins = 0;
         this.bricks = new Array();
         this.hearts = new Array();
         this.lives = this.totalLives;
@@ -77,6 +80,12 @@ var Game = (function () {
         this.paddle = new Paddle();
         this.ball = new Ball(this);
         this.utils = new Utils();
+        this.h2Attempts = document.createElement('h2');
+        this.h2Attempts.classList.add('lost');
+        document.body.appendChild(this.h2Attempts);
+        this.h2Wins = document.createElement('h2');
+        this.h2Wins.classList.add('win');
+        document.body.appendChild(this.h2Wins);
         this.startButton = document.querySelector('.start_game');
         this.startButton.addEventListener('click', function () { return setTimeout(_this.startGame(), 4000); });
     }
@@ -91,8 +100,14 @@ var Game = (function () {
             this.ball.hitPaddle();
         this.bricks.forEach(function (brick) {
             if (brick.status == true) {
-                if (_this.utils.hasOverlap(_this.ball, brick))
+                if (_this.utils.hasOverlap(_this.ball, brick)) {
+                    _this.totalBricksHit++;
+                    console.log(_this.totalBricksHit + _this.bricks.length);
+                    if (_this.totalBricksHit === 2) {
+                        _this.winGame();
+                    }
                     _this.removeBrick(brick);
+                }
             }
         });
         this.ball.update();
@@ -109,7 +124,7 @@ var Game = (function () {
     };
     Game.prototype.renderHearts = function () {
         for (var i = 0; i < 3; i++) {
-            this.hearts.push(new Score(i));
+            this.hearts.push(new Heart(i));
         }
     };
     Game.prototype.removeBrick = function (brick) {
@@ -126,8 +141,17 @@ var Game = (function () {
             this.gameOver();
         }
     };
+    Game.prototype.winGame = function () {
+        console.log('You Win!');
+        this.totalBricksHit = 0;
+        this.addWin();
+        this.resetGame();
+    };
     Game.prototype.gameOver = function () {
-        this.hearts[0].addAttempt();
+        this.addAttempt();
+        this.resetGame();
+    };
+    Game.prototype.resetGame = function () {
         this.paddle.startPosition();
         this.bricks.forEach(function (brick) {
             brick.removeMyself();
@@ -136,6 +160,7 @@ var Game = (function () {
             heart.removeMyself();
         });
         this.hearts.splice(0, 3);
+        this.bricks.splice(0, 18);
         this.renderHearts();
         this.renderBricks();
         this.lives = this.totalLives;
@@ -145,6 +170,14 @@ var Game = (function () {
         var startScreen = document.querySelector('.start_screen');
         startScreen.remove();
         requestAnimationFrame(function () { return _this.gameLoop(); });
+    };
+    Game.prototype.addAttempt = function () {
+        this.attempts++;
+        this.h2Attempts.innerHTML = "Fails: " + this.attempts;
+    };
+    Game.prototype.addWin = function () {
+        this.wins++;
+        this.h2Wins.innerHTML = "Wins: " + this.wins;
     };
     return Game;
 }());
@@ -201,34 +234,27 @@ var Paddle = (function () {
     };
     return Paddle;
 }());
-var Score = (function () {
-    function Score(i) {
+var Heart = (function () {
+    function Heart(i) {
         this.status = true;
-        this.attempts = 0;
         this.width = 44;
         this.height = 40;
         this.x = 20;
         this.y = (i * this.width) + 60;
+        this.attempts = 0;
         this.div = document.createElement('heart');
         this.div.classList.add('heart');
         document.body.appendChild(this.div);
         this.draw();
     }
-    Score.prototype.removeMyself = function () {
+    Heart.prototype.removeMyself = function () {
         this.status = false;
         this.div.remove();
     };
-    Score.prototype.addAttempt = function () {
-        this.attempts++;
-        console.log(this.attempts);
-        this.h2 = document.createElement('h2');
-        this.h2.innerHTML = "Fails: " + this.attempts;
-        document.body.appendChild(this.h2);
-    };
-    Score.prototype.draw = function () {
+    Heart.prototype.draw = function () {
         this.div.style.transform = "translate(" + this.x + "px, " + this.y + "px)";
     };
-    return Score;
+    return Heart;
 }());
 var Utils = (function () {
     function Utils() {

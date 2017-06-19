@@ -1,4 +1,4 @@
-class Score {
+class Heart {
 
     public div : HTMLElement;
     public h2 : HTMLElement;
@@ -10,7 +10,7 @@ class Score {
     private height : number; 
 
     public status:boolean = true;
-    public attempts : number = 0;
+    public attempts : number;
 
     constructor(i : number) {
         this.width = 44;
@@ -19,6 +19,8 @@ class Score {
         this.x = 20;
         this.y = (i * this.width) + 60;
 
+        this.attempts = 0;
+
         this.div = document.createElement('heart');
         this.div.classList.add('heart');
         document.body.appendChild(this.div);
@@ -26,20 +28,12 @@ class Score {
         this.draw();
     }
 
-    public removeMyself() : void {
+    public removeMyself(): void {
         this.status = false;
         this.div.remove();
     }
 
-    public addAttempt() : void {
-        this.attempts++;
-        console.log(this.attempts);
-        this.h2 = document.createElement('h2'); 
-        this.h2.innerHTML = `Fails: ${this.attempts}`;
-        document.body.appendChild(this.h2);
-    }
-
-    public draw() : void {
+    public draw(): void {
         this.div.style.transform = `translate(${this.x}px, ${this.y}px)`;     
     }
 }
