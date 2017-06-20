@@ -1,3 +1,13 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Ball = (function () {
     function Ball(game) {
         this.div = document.createElement('ball');
@@ -27,7 +37,7 @@ var Ball = (function () {
         else if (this.y < 0) {
             this.speedY *= -1;
         }
-        if (this.y > window.innerWidth + 40) {
+        if (this.y > window.innerHeight + 40) {
             console.log('lose one life');
             this.game.decreaseLives();
             this.startPosition();
@@ -179,23 +189,30 @@ var Game = (function () {
     };
     return Game;
 }());
+var GameObject = (function () {
+    function GameObject() {
+    }
+    return GameObject;
+}());
 window.addEventListener('load', function () {
     new Game();
 });
-var Paddle = (function () {
+var Paddle = (function (_super) {
+    __extends(Paddle, _super);
     function Paddle() {
-        var _this = this;
-        this.leftSpeed = 0;
-        this.rightSpeed = 0;
-        this.div = document.createElement('paddle');
-        document.body.appendChild(this.div);
-        this.width = 159;
-        this.height = 37;
-        this.leftKey = 37;
-        this.rightKey = 39;
-        this.startPosition();
+        var _this = _super.call(this) || this;
+        _this.leftSpeed = 0;
+        _this.rightSpeed = 0;
+        _this.div = document.createElement('paddle');
+        document.body.appendChild(_this.div);
+        _this.width = 159;
+        _this.height = 37;
+        _this.leftKey = 37;
+        _this.rightKey = 39;
+        _this.startPosition();
         window.addEventListener('keydown', function (event) { return _this.movePaddleOnKeyDown(event); });
         window.addEventListener('keyup', function (event) { return _this.stopPaddle(event); });
+        return _this;
     }
     Paddle.prototype.startPosition = function () {
         this.x = (window.innerWidth / 2) - 138;
@@ -231,19 +248,22 @@ var Paddle = (function () {
         this.div.style.transform = "translate(" + this.x + "px, " + this.y + "px)";
     };
     return Paddle;
-}());
-var Heart = (function () {
+}(GameObject));
+var Heart = (function (_super) {
+    __extends(Heart, _super);
     function Heart(i) {
-        this.status = true;
-        this.width = 44;
-        this.height = 40;
-        this.x = 20;
-        this.y = (i * this.width) + 60;
-        this.attempts = 0;
-        this.div = document.createElement('heart');
-        this.div.classList.add('heart');
-        document.body.appendChild(this.div);
-        this.draw();
+        var _this = _super.call(this) || this;
+        _this.status = true;
+        _this.width = 44;
+        _this.height = 40;
+        _this.x = 20;
+        _this.y = (i * _this.width) + 60;
+        _this.attempts = 0;
+        _this.div = document.createElement('heart');
+        _this.div.classList.add('heart');
+        document.body.appendChild(_this.div);
+        _this.draw();
+        return _this;
     }
     Heart.prototype.removeMyself = function () {
         this.status = false;
@@ -253,7 +273,7 @@ var Heart = (function () {
         this.div.style.transform = "translate(" + this.x + "px, " + this.y + "px)";
     };
     return Heart;
-}());
+}(GameObject));
 var Utils = (function () {
     function Utils() {
     }

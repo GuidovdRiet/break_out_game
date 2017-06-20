@@ -53,7 +53,7 @@ class Ball {
             this.speedY *= -1;
         }
 
-        if(this.y > window.innerWidth + 40) { 
+        if(this.y > window.innerHeight + 40) { 
             console.log('lose one life');
             this.game.decreaseLives();
             this.startPosition();

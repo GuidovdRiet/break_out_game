@@ -1,18 +1,14 @@
-class Heart {
+class Heart extends GameObject {
 
     public div : HTMLElement;
     public h2 : HTMLElement;
-
-    private x   : number;
-    private y   : number;
-
-    private width : number;
-    private height : number; 
 
     public status:boolean = true;
     public attempts : number;
 
     constructor(i : number) {
+        super();
+        
         this.width = 44;
         this.height = 40;
 

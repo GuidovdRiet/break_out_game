@@ -1,6 +1,4 @@
-class Paddle {
-
-    private div : HTMLElement;
+class Paddle extends GameObject {
 
     private leftKey : number;
     private rightKey : number;
@@ -8,12 +6,8 @@ class Paddle {
     private leftSpeed : number = 0;
     private rightSpeed : number = 0;
 
-    public x : number;
-    public y : number;
-    public width : number;
-    public height : number;
-
     constructor() {
+        super();
         // Add Paddle to DOM
         this.div = document.createElement('paddle');
         document.body.appendChild(this.div);
