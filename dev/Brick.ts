@@ -1,15 +1,15 @@
-class Brick {
+/// <reference path="GameObject.ts"/>
 
-    private div : HTMLElement;
-
-    private x:number;
-    private y:number;
-    private width : number = 151;
-    private height : number = 72;
+class Brick extends GameObject {
     
     public status:boolean = true;
 
     constructor(r:number, c:number) {
+        super();
+
+        this.width = 151;
+        this.height = 72;
+
         this.y = r * this.height + 20;
         this.x = c * this.width + ((window.innerWidth / 2) - 453);
 

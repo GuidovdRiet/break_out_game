@@ -1,3 +1,5 @@
+/// <reference path="GameObject.ts"/>
+
 class Paddle extends GameObject {
 
     private leftKey : number;
@@ -8,6 +10,7 @@ class Paddle extends GameObject {
 
     constructor() {
         super();
+        
         // Add Paddle to DOM
         this.div = document.createElement('paddle');
         document.body.appendChild(this.div);

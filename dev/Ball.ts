@@ -1,11 +1,6 @@
-class Ball {
+/// <reference path="GameObject.ts"/>
 
-    public div : HTMLElement;
-    
-    public x : number;
-    public y : number;
-    public width : number;
-    public height : number;
+class Ball extends GameObject {
 
     private speedX : number;
     private speedY : number;
@@ -13,10 +8,13 @@ class Ball {
     private game : Game;
 
     constructor(game : Game) {
-
+        super();
+        
         // Create ball in DOM
         this.div = document.createElement('ball');
         document.body.appendChild(this.div);
+
+        // Give the ball his starting position
         this.startPosition();
 
         // Objects

@@ -1,5 +1,7 @@
 /// <reference path="brick.ts"/>
-class Game {
+/// <reference path="GameObject.ts"/>
+
+class Game extends GameObject {
     private lives : number;
     private totalLives : number = 3;
     private totalBricksHit : number = 0;
@@ -8,7 +10,6 @@ class Game {
 
     private paddle : Paddle;
     private brick : Brick;
-    private utils : Utils;
     private ball : Ball;
 
     private startButton : HTMLElement; 
@@ -19,6 +20,8 @@ class Game {
     private hearts : Array<Heart> = new Array<Heart>();
     
     constructor() {
+        super();
+
         this.lives = this.totalLives;
 
         // Create bricks 
@@ -28,7 +31,6 @@ class Game {
         // create objects
         this.paddle = new Paddle();
         this.ball = new Ball(this);
-        this.utils = new Utils();
 
         // create fails dom el
         this.h2Attempts = document.createElement('h2');
@@ -54,11 +56,11 @@ class Game {
     // update balls en paddles 
     private updateElements() : void {
 
-        if(this.utils.hasOverlap(this.ball, this.paddle)) this.ball.hitPaddle();
+        if(super.collision(this.ball, this.paddle)) this.ball.hitPaddle();
         
         this.bricks.forEach((brick : any) => {
             if(brick.status == true) {
-                if(this.utils.hasOverlap(this.ball, brick)) {
+                if(super.collision(this.ball, brick)) {
                     this.totalBricksHit++;
                     if(this.totalBricksHit === this.bricks.length) {
                         this.winGame();

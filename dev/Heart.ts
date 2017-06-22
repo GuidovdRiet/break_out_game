@@ -1,6 +1,7 @@
+/// <reference path="GameObject.ts"/>
+
 class Heart extends GameObject {
 
-    public div : HTMLElement;
     public h2 : HTMLElement;
 
     public status:boolean = true;
