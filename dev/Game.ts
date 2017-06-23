@@ -55,22 +55,27 @@ class Game extends GameObject {
 
     // update balls en paddles 
     private updateElements() : void {
-
-        if(super.collision(this.ball, this.paddle)) this.ball.hitPaddle();
+        if(this.ball) {
+            if(super.collision(this.ball, this.paddle)) this.ball.hitPaddle();
+        }
         
         this.bricks.forEach((brick : any) => {
             if(brick.status == true) {
-                if(super.collision(this.ball, brick)) {
-                    this.totalBricksHit++;
-                    if(this.totalBricksHit === this.bricks.length) {
-                        this.winGame();
+                if(this.ball) {
+                    if(super.collision(this.ball, brick)) {
+                        this.totalBricksHit++;
+                        if(this.totalBricksHit === this.bricks.length) {
+                            this.winGame();
+                        }
+                        this.removeBrick(brick);   
                     }
-                    this.removeBrick(brick);   
                 }
             }
         });
             
-        this.ball.update();
+        if(this.ball) {
+            this.ball.update();
+        }
         this.paddle.update();
     }
 
@@ -93,7 +98,9 @@ class Game extends GameObject {
     // Remove brick on ball hit
     private removeBrick(brick : Brick): void {
         brick.removeMyself();
-        this.ball.reverse();
+        if(this.ball) {
+            this.ball.reverse();
+        }
     }
 
     // When ball leaves the screen decrease life by 1  
@@ -111,14 +118,52 @@ class Game extends GameObject {
     }
 
     private winGame(): void {
-        this.totalBricksHit = 0;       
-        this.addWin();
-        this.resetGame();
+        this.totalBricksHit = 0;
+        this.ball.removeMyself();
+        this.ball = undefined;
+
+        const div = document.createElement('div');
+        const h1 = document.createElement('h1');
+        const button = document.createElement('button');
+
+        div.classList.add('win_screen');
+        button.classList.add('btn', 'btn-green');
+        h1.innerHTML = 'You Win!';
+        button.innerHTML = 'Start';
+
+        div.appendChild(h1);
+        div.appendChild(button);
+        document.body.appendChild(div);
+
+        button.addEventListener('click', () => {
+            div.remove();
+            this.resetGame();
+            this.startGame()
+        })
     }
 
     private gameOver(): void {
-        this.addAttempt();
-        this.resetGame();
+        this.ball.removeMyself();
+        this.ball = undefined;
+
+        const div = document.createElement('div');
+        const h1 = document.createElement('h1');
+        const button = document.createElement('button');
+
+        div.classList.add('lose_screen');
+        button.classList.add('btn', 'btn-red');
+        h1.innerHTML = 'You Lose!';
+        button.innerHTML = 'Try again';
+
+        div.appendChild(h1);
+        div.appendChild(button);
+        document.body.appendChild(div);
+
+        button.addEventListener('click', () => {
+            div.remove();
+            this.resetGame();
+            this.startGame()
+        })
     }
 
     private resetGame() {
@@ -139,6 +184,11 @@ class Game extends GameObject {
         this.hearts.splice(0, 3);
         this.bricks.splice(0, 18);
 
+        // Create a ball to play after 2 seconds
+        setTimeout(() => {
+            this.ball = new Ball(this);
+        }, 2000)
+
         // Create new hearts
         this.renderHearts();
 
@@ -152,16 +202,6 @@ class Game extends GameObject {
     private startGame(): void {
         const startScreen = document.querySelector('.start_screen');
         startScreen.remove();
-        requestAnimationFrame(() => this.gameLoop());
-    }
-
-    private addAttempt(): void {
-        this.attempts++;
-        this.h2Attempts.innerHTML = `Fails: ${this.attempts}`;
-    }
-
-    private addWin(): void {
-        this.wins++;
-        this.h2Wins.innerHTML = `Wins: ${this.wins}`;
+        this.gameLoop();
     }
 }

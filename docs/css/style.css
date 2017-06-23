@@ -25,21 +25,7 @@ h1 {
   top: 1em;
 }
 
-.win, .lost {
-  position: fixed;
-  font-size: 5em;
-  right: 1em;
-}
-
-.win {
-  top: 2.2em;
-}
-
-.lost {
-  top: 1.2em;
-}
-
-.start_screen {
+.start_screen, .win_screen, .lose_screen {
   z-index: 4;
   width: 100%;
   height: 100vh;
@@ -47,6 +33,14 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.win_screen {
+  background-color: #49D292;
+}
+
+.lose_screen {
+  background-color: #E70000;
 }
 
 .btn {
@@ -63,14 +57,28 @@ h1 {
   font-size: 4em;
 }
 
-.dropbtn {
-  margin-top: 2em;
-}
-
 .btn:hover {
   cursor: pointer;
   background-color: #73CCF2;
 }
+
+.btn-green {
+  background-color: #49D292;
+}
+
+.btn-green:hover {
+  background-color: #4DE19C;
+}
+
+.btn-red {
+  background-color: #E70000;
+}
+
+.btn-red:hover {
+  background-color: #F81919;
+}
+
+
 
 paddle {
   width: 159px;

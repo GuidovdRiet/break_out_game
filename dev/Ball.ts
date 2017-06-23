@@ -59,7 +59,7 @@ class Ball extends GameObject {
         this.draw();
     }
 
-    public removeBall() {
+    public removeMyself() {
         this.div.remove();
     }
 
