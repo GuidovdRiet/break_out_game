@@ -184,7 +184,7 @@ class Game extends GameObject {
         this.hearts.splice(0, 3);
         this.bricks.splice(0, 18);
 
-        // Create a ball to play after 2 seconds
+        // Create a ball after 2 seconds 
         setTimeout(() => {
             this.ball = new Ball(this);
         }, 2000)
